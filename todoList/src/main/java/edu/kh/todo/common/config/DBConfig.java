@@ -69,7 +69,7 @@ public class DBConfig {
 
 	////////////////////// HikariCP 설정 //////////////////////
 
-	@Bean
+	@Bean 					// 접두사
 	@ConfigurationProperties(prefix = "spring.datasource.hikari")
 	public HikariConfig hikariConfig() {
 
@@ -121,7 +121,7 @@ public class DBConfig {
 		// 매퍼 파일이 모여있는 경로 지정
 		sessionFactoryBean.setMapperLocations(
 				applicationContext.getResources("classpath:/mappers/**.xml"));
-				// 현재 프로젝트  .자원을 얻어오겠다 이 경로( src/main/resources/mappers/하위의 모든 .xml 파일(**.xml))에서!
+			// 현재 프로젝트  .자원을 얻어오겠다 이 경로( src/main/resources/mappers/하위의 모든 .xml 파일(**.xml))에서!
 
 		// 세팅 2. 해당 패키지 내 모든 클래스의 별칭을 등록
 		// - Mybatis는 특정 클래스 지정 시 패키지명.클래스명을 모두 작성해야 함.

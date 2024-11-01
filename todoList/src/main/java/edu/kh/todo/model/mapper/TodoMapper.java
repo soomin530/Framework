@@ -25,6 +25,7 @@ import edu.kh.todo.model.dto.Todo;
 
 @Mapper 
 public interface TodoMapper { // 인터페이스라 객체화 될 수 없음
+	// 이 인터페이스를 상속받는 MyBatis 객체가 있음
  
 	/*
 	 * Mapper의 메서드명 == mapper.xml 파일 내 태그의 id
@@ -56,6 +57,37 @@ public interface TodoMapper { // 인터페이스라 객체화 될 수 없음
 	 * @param todo
 	 * @return result
 	 */
-	int addTodo(Todo todo);  
+	int addTodo(Todo todo);
+
+
+	/** 할 일 상세조회
+	 * @param todoNo
+	 * @return todo
+	 */
+	Todo todoDetail(int todoNo);
+
+
+	/** 완료 여부 변경
+	 * @param todo
+	 * @return
+	 */
+	int changeComplete(Todo todo);
+
+
+	/** 할 일 삭제
+	 * @param todo
+	 * @return
+	 */
+	int todoDelete(Todo todo);
+
+
+	/** 할 일 수정
+	 * @param todo
+	 * @return
+	 */
+	int todoUpdate(Todo todo); 
+
+
+
 
 }
