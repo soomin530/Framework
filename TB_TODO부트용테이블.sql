@@ -71,13 +71,14 @@ WHERE TODO_NO = 1;
 SELECT '같음' FROM DUAL
 WHERE 1 = '1';
 
-DELETE FROM TB_TODO
-WHERE TODO_NO = ?
+--UPDATE TB_TODO
+--SET TODO_TITLE = #{todoTitle},
+--TODO_CONTENT = #{todoContent}
+--WHERE TODO_NO = #{todoNo}
 
-UPDATE TB_TODO
-SET TODO_TITLE = #{todoTitle},
-TODO_CONTENT = #{todoContent}
-WHERE TODO_NO = #{todoNo}
+SELECT COUNT(*)
+FROM TB_TODO
+WHERE COMPLETE = 'Y';
 
 
 

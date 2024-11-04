@@ -75,19 +75,19 @@ public interface TodoMapper { // 인터페이스라 객체화 될 수 없음
 
 
 	/** 할 일 삭제
-	 * @param todo
-	 * @return
+	 * @param todoNo
+	 * @return result
 	 */
-	int todoDelete(Todo todo);
-
+	int todoDelete(int todoNo);
 
 	/** 할 일 수정
 	 * @param todo
-	 * @return
+	 * @return result
 	 */
-	int todoUpdate(Todo todo); 
+	int todoUpdate(Todo todo);
 
-
-
-
+	/** 전체 할 일 개수 조회
+	 * @return totalCount
+	 */
+	int getTotalCount();
 }

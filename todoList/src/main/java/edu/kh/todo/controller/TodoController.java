@@ -141,7 +141,7 @@ public class TodoController {
 							@RequestParam("todoNo")int todoNo,
 							RedirectAttributes ra) {
 		
-		int result = service.todoDelete(todo);
+		int result = service.todoDelete(todoNo);
 		
 		String message = null;
 		
