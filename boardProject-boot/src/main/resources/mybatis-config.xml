@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<!--  에러가 떴다면 window -> Preferences -> XML(Wild Web Developer) -> 윗줄 Download 어쩌고 체크하기~ -->
+<configuration>
+
+	<settings>
+	<!-- Java -> DB로 INSERT/UPDATE 시 Java의 null 값을 DB의 NULL로 인식하도록 설정 -->
+		<setting name="jdbcTypeForNull" value="NULL" />
+		
+		<!-- DB의 UnderScore(_) 표기법 <-> Java의 UnderScore 표기법이 서로 변환될 수 있도록 매핑하여
+			 Java 필드명(memberId)과 DB 컬럼명(MEMBER_ID)가 서로 연결될 수 있도록 함
+		-->
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+						<!-- ㄴ UnderScore와 CamelCase 를 매핑하겠다! 해서 map으로 시작 -->
+	</settings>
+
+</configuration>
