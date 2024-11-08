@@ -4,15 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
 import edu.kh.project.member.model.service.MemberService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,6 +61,12 @@ public class MemberController {
 						Model model,
 						@RequestParam(value="saveId", required = false)String saveId,
 						HttpServletResponse resp) {
+		/*
+		 * [ 체크박스]
+		 * - 체크가    된 경우 : "on"
+		 * - 체크가 안 된 경우 : "null"
+		 * 
+		 * */
 		
 		// 로그인 서비스 호출
 		Member loginMember = service.login(inputMember); 
@@ -73,9 +82,34 @@ public class MemberController {
 			// 2단계 : 클래스 위에 @SessionAttributes() 어노테이션 작성하여
 			//		   session scope로 이동
 			
+			// **************** Cookie ****************
+			
+			// 이메일 저장
+			
+			// 쿠키 객체 생성 (K:V)
+			Cookie cookie = new Cookie("saveId", loginMember.getMemberEmail());
+			// saveId=user01@kh.or.kr
+			
+			// 쿠키가 적용될 경로 설정
+			// -> 클라이언트가 어떤 요청을 할 때 쿠키가 첨부될지 지정
+			
+			// ex) "/" : IP 또는 도메인 또는 localhost 의미
+			//			 --> 메인페이지 + 그 하위 주소 모두
+			cookie.setPath("/");
+			
+			// 쿠키의 만료 기간 지정
+			if(saveId != null) { // 아이디 저장 체크 시
+				cookie.setMaxAge(60 * 60 * 24 * 30); // 30일 (초 단위로 지정)
+				
+			} else { // 미체크 시
+				cookie.setMaxAge(0); // 0초 (클라이언트 쿠키 삭제) 
+			}
+			
+			// 응답 객체에 쿠키 추가 -> 클라이언트 쪽으로 전달
+			resp.addCookie(cookie);
 		}
  		
-		return "redirect:/"; // 메인페이지로 재요청
+		return "redirect:/"; // 메인페이지로 재요청 
 		
 	}
 	
@@ -91,6 +125,78 @@ public class MemberController {
 		
 		return "redirect:/";
 		
+	}
+	
+	/** 회원가입 페이지로 이동
+	 * @return
+	 */
+	@GetMapping("signup")
+	public String signUpPage() {
+		return "member/signup";
+		
+	}
+	 
+	/** 이메일 중복 검사 (비동기 요청)
+	 * @return
+	 */
+	@ResponseBody // 응답 본문(fetch 요청한 쪽)으로 돌려보냄
+	@GetMapping("checkEmail") // Get 요청 /member/checkEmail
+	public int checkEmail(@RequestParam("memberEmail")String memberEmail) {
+		return service.checkEmail(memberEmail);
+		
+	}
+	
+	/** 닉네임 유효성 검사
+	 * @return 중복 1, 아니면 0
+	 */
+	@ResponseBody // 비동기 요청 쪽으로 보냄
+	@GetMapping("checkNickname")
+	public int checkNickname(@RequestParam("memberNickname")String memberNickname) {
+		return service.checkNickname(memberNickname);
+	}
+	
+	// @ModelAttribute DTO 어노테이션 생략 가능
+	
+	/** 회원 가입	
+	 * @param inputMember : 입력된 회원 정보(memberEmail, memberPw, memberNickname, memberTel,
+	 * 						(memberAddress - 따로 배열로 받아서 처리))
+	 * @param memberAddress : 입력한 주소 input 3개의 값을 배열로 전달 [우편번호, 도로명/지번주소, 상세주소]
+	 * @param ra : 리다이렉트 시 request scope 로 데이터 전달하는 객체
+	 * 		(addFlashAttribute 사용 시 session scope로 변환했다가 다시 request scope로 바뀜. 1회성으로 session scope 사용 가능)
+	 * @return
+	 */
+	@PostMapping("signup")
+	public String signup(/*@ModelAttribute*/ Member inputMember, // 비동기가 아니기 때문에 반환형 String.
+						@RequestParam("memberAddress")String[] memberAddress,
+						RedirectAttributes ra) { // 리다이렉트 사용할 거라
+		
+		// log.debug("inputMember : " + inputMember);
+		
+		// 회원가입 서비스 호출
+		int result = service.signup(inputMember, memberAddress); // ^^^로 바꾸는 데이터 가공 일어남
+		
+		String path = null;
+		String message = null;
+		
+		if(result > 0) { // 삽입 성공
+			
+			message = inputMember.getMemberNickname() + "님의 가입을 환영합니다!";
+			path = "/"; // 메인페이지로 재요청 
+			
+		} else { // 실패
+			
+			message = "회원 가입 실패...";
+			path = "signup";
+			
+		}
+		
+		ra.addFlashAttribute("message", message); 
+		
+		return"redirect:" + path; // 리턴 값이 foward 하는 경로나 redirect 요청 주소 -> String
+		// 성공 -> redirect:/
+		// 실패 -> redirect:signup (상대경로)
+					// 현재 주소 /member/signup (GET 방식 요청)
+					// 가장 마지막 경로인 signup만 갈아끼움!
 	}
 
 }

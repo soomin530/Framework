@@ -15,5 +15,43 @@
 	WHERE MEMBER_EMAIL = #{memberEmail}
 	AND MEMBER_DEL_FL = 'N'
 	 </select> 
+	 
+	 <!-- #{}가 홑따옴표 붙여주기 때문에 #{} 사용하기!! -->
+	
+	<!-- 이메일 중복 검사 -->
+	<select id="checkEmail" resultType="_int">
+	SELECT COUNT(*)
+	FROM "MEMBER"
+	WHERE MEMBER_DEL_FL = 'N'
+	AND MEMBER_EMAIL = #{memberEmail}
+	</select>
+	
+	<!-- 닉네임 유효성 검사 -->
+	<select id="checkNickname" resultType="_int">
+	SELECT COUNT(*)
+	FROM "MEMBER"
+	WHERE MEMBER_DEL_FL = 'N'
+	AND MEMBER_NICKNAME = #{memberNickname}
+	</select>
+	
+	
+	<!-- 회원 가입 -->
+	<insert id="signup">
+	INSERT INTO "MEMBER"
+	VALUES(SEQ_MEMBER_NO.NEXTVAL, 
+			 #{memberEmail},
+			 #{memberPw},
+			 #{memberNickname},
+			 #{memberTel},
+			 #{memberAddress},
+			 NULL,
+			 DEFAULT,
+			 DEFAULT,
+			 DEFAULT
+		   )
+	</insert>
+
+
+
 
 </mapper>
