@@ -55,6 +55,10 @@ COMMIT;
 
 SELECT * FROM "MEMBER";
 
+-- 유저1 비번 : pass01!!
+-- 닉네임 비번 : pass012
+-- 닉네임입니다 비번 : pass0123
+
 -- 회원 1번 유저일 암호화된 비밀번호로 업데이트(pass01!)
 UPDATE MEMBER
 SET MEMBER_PW = '$2a$10$mQuTt31FyF3uXL2qAkF21eZsPnoQP6zeo9pKCevmsWtGJEOsKtFhu'
@@ -81,6 +85,15 @@ SELECT COUNT(*)
 FROM "MEMBER"
 WHERE MEMBER_DEL_FL = 'N'
 AND MEMBER_NICKNAME = '유저일';
+
+UPDATE "MEMBER" SET
+MEMBER_PW = 'pass01!'
+WHERE MEMBER_NO = '1';
+
+-- 탈퇴한 회원 다시 복구
+UPDATE "MEMBER" SET
+MEMBER_DEL_FL = 'N'
+WHERE MEMBER_NO = 1;
 
 -----------------------------------------
 

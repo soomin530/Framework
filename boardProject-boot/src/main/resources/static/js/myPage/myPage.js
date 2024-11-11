@@ -25,7 +25,11 @@ function execDaumPostcode() {
     }).open();
 }
 
-document.querySelector("#searchAddress").addEventListener("click", execDaumPostcode); // 이름 있는 함수 정의 시 그것만 불러서 사용하면 됨
+const searchAddress = document.querySelector("#searchAddress");
+if(searchAddress != null) {    
+    searchAddress.addEventListener("click", execDaumPostcode);
+}
+//document.querySelector("#searchAddress").addEventListener("click", execDaumPostcode); // 이름 있는 함수 정의 시 그것만 불러서 사용하면 됨
 
 // #updateInfo 요소가 존재 할 때만 수행
 if(updateInfo != null) {

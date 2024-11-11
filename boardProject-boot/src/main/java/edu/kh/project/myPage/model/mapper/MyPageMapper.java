@@ -1,5 +1,7 @@
 package edu.kh.project.myPage.model.mapper;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import edu.kh.project.member.model.dto.Member;
@@ -12,5 +14,26 @@ public interface MyPageMapper {
 	 * @return result
 	 */
 	int updateInfo(Member inputMember);
+
+
+	/** 회원의 비밀번호 조회
+	 * @param memberNo
+	 * @return 암호화 된 원래 비밀번호 (그래서 반환형 String)
+	 */
+	String selectPw(int memberNo);
+
+
+	/** 비밀번호 변경
+	 * @param paramMap
+	 * @return result(업데이트 성공한 행 개수) 
+	 */
+	int changePw(Map<String, Object> paramMap);
+
+
+	/** 회원 탈퇴
+	 * @param memberNo
+	 * @return result(업데이트 성공한 행 개수) 
+	 */
+	int secession(int memberNo);   
 	
 }
