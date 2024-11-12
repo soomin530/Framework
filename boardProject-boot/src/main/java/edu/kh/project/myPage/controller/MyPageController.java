@@ -1,5 +1,6 @@
 package edu.kh.project.myPage.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
+import edu.kh.project.myPage.model.dto.UploadFile;
 import edu.kh.project.myPage.model.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,11 +96,6 @@ public class MyPageController {
 		return "myPage/myPage-fileTest";
 	}
 
-	// 파일 목록 조회 화면 이동
-	@GetMapping("fileList") // /myPage/fileList GET 방식 요청
-	public String fileList() {
-		return "myPage/myPage-fileList";
-	}
 
 	/**
 	 * @param inputMember   : 커맨드 객체(@ModelAttribute 생략된 상태) 제출된 회원 닉네임, 전화번호, 주소
@@ -152,24 +149,25 @@ public class MyPageController {
 	/** 비밀번호 변경
 	 * @param paramMap : 모든 파라미터를 맵으로 저장
 	 * @param loginMember : 세션에 등록된 현재 로그인 한 회원 정보
-	 * @param ra : 리다이렉트 시 request scope로 메시지 전달 역할ㄴ
+	 * @param ra : 리다이렉트 시 request scope로 메시지 전달 역할
 	 * @return
 	 */
 	@PostMapping("changePw") // /myPage/changePw POST 요청 매핑
-	public String changePw( @RequestParam Map<String, Object> paramMap,
-							@SessionAttribute("loginMember")Member loginMember,
-							RedirectAttributes ra) {
+	public String changePw( @RequestParam Map<String, Object> paramMap, 
+							@SessionAttribute("loginMember")Member loginMember, // 회원 정보 가져와야 해서
+							RedirectAttributes ra) { // 리다이렉트 시 메세지 보내기 위해서
 		
 		// log.debug("paramMap : " + paramMap);
 		// paramMap : {currentPw=pass01!, newPw=pass012!, newPwConfirm=pass012!}
 		// log.debug("loginMember : " + loginMember);
 		// loginMember : Member(memberNo=1, memberEmail=user01@kh.or.kr, memberPw=null, memberNickname=유저1, memberTel=01011112222, memberAddress=03154^^^서울 종로구 종로1가 1^^^1층, profileImg=null, enrollDate=2024년 11월 05일 14시 14분 42초, memberDelfl=null, authoriry=0)
 		
-		// 로그인 한 회원 번호
+		// 로그인 한 회원 번호 가져오기
 		int memberNo = loginMember.getMemberNo();
 		
 		// 현재 + 새 + 회원 번호를 서비스로 전달
 		int result = service.changePw(paramMap, memberNo);
+		// update라 int형 / 현재 비밀번호, 새 비밀번호, 회원번호 전달
 		
 		String path = null;
 		String message = null;
@@ -179,20 +177,20 @@ public class MyPageController {
 			// 메시지 "비밀번호가 변경되었습니다";
 			// 리다이렉트 myPage/info
 			message = "비밀번호가 변경되었습니다";
-			path = "/myPage/info";
+			path = "/myPage/info"; // 리다이렉트 할 경로
 			
 		} else {
 			// 변경 실패 시
 			// 메시지 "현재 비밀번호가 일치하지 않습니다";
 			// 리다이렉트 myPage/changePw
 			message = "현재 비밀번호가 일치하지 않습니다";
-			path = "/myPage/info";
+			path = "/myPage/info"; // 리다이렉트 할 경로
 			
 		}
 		
 		ra.addFlashAttribute("message", message);
 		
-		return "redirect:" + path;
+		return "redirect:" + path; // 성공/실패 시 각각 리다이렉트 하는 경로 다름
 		
 	}
 	
@@ -275,5 +273,110 @@ public class MyPageController {
 		return "redirect:/myPage/fileTest"; // GET 요청 보내기
 		
 	}
+	@PostMapping("file/test2")
+	public String fileUpload2(@RequestParam("uploadFile") MultipartFile uploadFile,
+								@SessionAttribute("loginMember")Member loginMember,
+								RedirectAttributes ra) throws Exception { 
+		
+		// 로그인 한 회원의 번호 얻어오기 (누가 업로드 했는가)
+		int memberNo = loginMember.getMemberNo();
+		
+		// 업로드 된 파일 정보를 DB에 INSERT 후 결과 행의 개수 반환 받을 예정
+		int result = service.fileUpload2(memberNo, uploadFile); 
+		
+		String message = null;
+		
+		if(result > 0) {
+			message = "파일 업로드 성공";
+			
+		} else {
+			message = "파일 업로드 실패";
+		}
+		
+		ra.addFlashAttribute("message", message); 
+		
+		return "redirect:/myPage/fileTest"; //  /myPage/fileTest GET 방식 재요청 
+	}
+	
+	// 파일 목록 조회 화면 이동
+		/** 파일 목록 조회하여 응답 화면으로 이동
+		 * @param model : 값 전달용 객체 (기본 request scope)
+		 * @param loginMember : 현재 로그인 한 회원의 정보
+		 * @return
+		 */
+		@GetMapping("fileList") // /myPage/fileList GET 방식 요청
+		public String fileList(Model model,
+								@SessionAttribute("loginMember")Member loginMember) {
+			
+			// 파일 목록 조회 서비스 호출 (현재 로그인 한 회원이 올린 이미지만)
+			int memberNo = loginMember.getMemberNo();
+			List<UploadFile> list = service.fileList(memberNo); 
+			
+			// model에 list 담아서 forward
+			model.addAttribute("list", list);
+			
+			// templates/myPage/myPage-fileList.html
+			return "myPage/myPage-fileList";
+		}
+		
+		@PostMapping("file/test3")
+		public String fileUpload3(@RequestParam("aaa") List<MultipartFile> aaaList,
+								@RequestParam("bbb")List<MultipartFile> bbbList,
+								@SessionAttribute("loginMember")Member loginMember,
+								RedirectAttributes ra) throws Exception{
+			
+			// aaa 파일 미제출 시
+			// -> 0번, 1번 인덱스 파일이 모두 비어있음
+			
+			// bbb(multiple) 파일 미제출 시
+			// -> 0번 인덱스 파일이 비어있음
+			
+			// log.debug("aaaList : " + aaaList);
+			// log.debug("bbbList : " + bbbList);
+			
+			// 여러 파일 업로드 서비스 호출
+			int memberNo = loginMember.getMemberNo();
+			
+			int result = service.fileUpload3(aaaList, bbbList, memberNo); 
+			// result == 업로드 된 파일 개수
+			
+			String message = null;
+			
+			if(result == 0) {
+				message = "업로드 된 파일이 없습니다.";
+				
+			} else {
+				
+				message = result + "개의 파일이 업로드 되었습니다.";
+			}
+			
+			ra.addFlashAttribute("message", message); 
+			return "redirect:/myPage/fileTest";
+			
+		}
+		
+		/** 프로필 이미지 변경 요청
+		 * @param profileImg
+		 * @param loginMember
+		 * @param ra
+		 * @return
+		 */
+		@PostMapping("profile")
+		public String profile( @RequestParam("profileImg") MultipartFile profileImg,
+								@SessionAttribute("loginMember") Member loginMember,
+								RedirectAttributes ra) throws Exception {
+			
+			// 서비스 호출
+			int result = service.profile(profileImg, loginMember);
+			
+			String message = null;
+			if(result > 0) message = "변경 성공!";
+			else 		   message = "변경 실패 ㅠㅠ"; 
+			
+			ra.addFlashAttribute("message", message);
+			
+			return "redirect:profile"; // 리다이렉트 - /myPage/profile GET 요청 (상대경로)
+			
+		}
 
 }
