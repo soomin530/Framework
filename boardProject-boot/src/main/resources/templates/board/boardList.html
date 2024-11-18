@@ -217,6 +217,7 @@
 	
 	<script th:inline="javascript">
 		const boardCode = /*[[${boardCode}]]*/ "게시판 코드 번호";
+		// @PathVariable 을 통해 Controller에서 request scope에 세팅된 boardCode
 	</script>
 	
 	<script src="/js/board/boardList.js"></script>

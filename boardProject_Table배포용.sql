@@ -657,6 +657,18 @@ COMMIT;
 
 ----------------------------------------------------------
 
+INSERT INTO "BOARD_IMG"
+(
+	SELECT NEXT_IMG_NO(), '경로1', '원본1', '변경1', 1, 2001 FROM DUAL
+	UNION
+	SELECT NEXT_IMG_NO(), '경로2', '원본2', '변경2', 1, 2001 FROM DUAL
+	UNION
+	SELECT NEXT_IMG_NO(), '경로3', '원본3', '변경3', 1, 2001 FROM DUAL
+);
+
+-- 우리가 가져온 이미지 정보를 하나의 INSERT 구문으로 가져올 수 있음
+SELECT * FROM "BOARD_IMG"; 
+
 -- SEQ_IMG_NO 시퀀스의 다음 값을 반환하는 함수 생성
 
 -- 전체 드래그 ALT+X
@@ -672,6 +684,8 @@ BEGIN
 
 	RETURN IMG_NO;
 END;
+
+SELECT NEXT_IMG_NO() FROM DUAL;
 -- 여기까지 긁기
 
 
