@@ -147,8 +147,9 @@
 
     <script th:inline="javascript">
 
-        // - loginMember가 null 인 경우 null 반환
+        // - loginMember가 null 인 경우 null 반환 (?. : 안전 탐색 연산자 -> 앞이 null이면 접근하지 않아 에러 발생 X)
         const loginMemberNo = /*[[${session.loginMember?.memberNo}]]*/ "로그인 회원 번호";
+								// 타임리프 이용해서 memberNo 얻어옴
 
         // 현재 게시글 번호를 전역 변수로 저장
         const boardNo = /*[[${board.boardNo}]]*/ "게시글 번호";

@@ -14,7 +14,7 @@
     <main>
         <th:block th:replace="~{common/header}"></th:block>
 
-        <form action="update" th:object="${board}" method="POST" 
+        <form action="update" th:object="${board}" method="POST"  
             class="board-write" id="boardUpdateFrm" enctype="multipart/form-data">  
 
             <h1 class="board-name" th:text="${boardName}">게시판 이름</h1>
@@ -24,6 +24,7 @@
                 <input type="text" name="boardTitle" 
                         placeholder="제목" 
                         th:value="${board.boardTitle}">   
+						<!-- *{boardTitle} 이라고 해줘도 됨-->
             </h1>
 
 
