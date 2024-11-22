@@ -45,6 +45,12 @@ public interface EditBoardMapper {
 	 * @param img
 	 * @return
 	 */
-	int insertImage(BoardImg img);    
+	int insertImage(BoardImg img);
+
+	/** 게시글 삭제
+	 * @param map
+	 * @return
+	 */
+	int boardDelete(Map<String, Integer> map);     
 
 }

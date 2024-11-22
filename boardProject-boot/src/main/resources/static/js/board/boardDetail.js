@@ -86,6 +86,8 @@ if(deleteBtn != null){
     }
 
     const url = location.pathname.replace("board","editBoard") + "/delete"; // /editBoard/1/2000/delete
+								// board를 editboard 로 바꾸겠다
+								// /board/1/2000/delete?cp=1
     const queryString = location.search; // ? cp=1
     location.href = url + queryString;
   });
@@ -104,6 +106,8 @@ if(deleteBtn2 != null){
     }
 
     const url = location.pathname.replace("board","editBoard")  + "/delete"; 
+								// board를 editboard 로 바꾸겠다
+
 
     // form태그 생성
     const form = document.createElement("form");

@@ -40,6 +40,8 @@ public class BoardController {
 	 * 
 	 * @param boardCode : 게시판 종류 구분 번호(1/2/3..)
 	 * @param cp        : 현재 조회 요청한 페이지 번호(없으면 기본값 1)
+	 * @param paramMap (검색할 때 추가) : 제출된 파라미터가 모두 저장된 Map (검색 시, key와 query가 담겨있음)
+	 * 										{key=t, query=박명수 짜잔}
 	 * @return
 	 * 
 	 *         {boardCode} - /board/xxx board 이하 1레벨 자리에 어떤 주소값이 들어오든 모두 이 메서드 매핑
@@ -56,13 +58,32 @@ public class BoardController {
 	 */
 	@GetMapping("{boardCode:[0-9]+}")
 	public String selectBoardList(@PathVariable("boardCode") int boardCode,
-			@RequestParam(value = "cp", required = false, defaultValue = "1") int cp, Model model) {
+			@RequestParam(value = "cp", required = false, defaultValue = "1") int cp, Model model,
+			@RequestParam Map<String, Object> paramMap) {
 
 		// 조회 서비스 호출 후 결과 반환
 		Map<String, Object> map = null;
+		
+		// 검색이 아닌 경우 --> paramMap 은 {}
+		if(paramMap.get("key")== null) {
+			
+			// 게시글 목록 조회 서비스 호출
+			map = service.selectBoardList(boardCode, cp);
+			
+			
+		} else {
+			// 검색인 경우      --> {key=t, query=박명수 짜잔} 
+			
+			// boardCode를 paramMap에 추가
+			paramMap.put("boardCode", boardCode);
+			// --> paramMap은 {key=t, query=박명수 짜잔, boardCode=1}
+			
+			// 검색 서비스 호출
+			map = service.searchList(paramMap, cp);
+		}
+		
+		
 
-		// 게시글 목록 조회 서비스 호출
-		map = service.selectBoardList(boardCode, cp);
 
 		// model에 반환 받은 값을 등록 (K:V꼴로)
 		model.addAttribute("pagination", map.get("pagination"));
