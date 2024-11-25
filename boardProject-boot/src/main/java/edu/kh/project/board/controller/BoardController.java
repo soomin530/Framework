@@ -105,9 +105,9 @@ public class BoardController {
 	public String boardDetail(@PathVariable("boardCode") int boardCode, @PathVariable("boardNo") int boardNo,
 			Model model, RedirectAttributes ra,
 			@SessionAttribute(value = "loginMember", required = false) Member loginMember, HttpServletRequest req, // 요청에
-																													// 담긴
-																													// 쿠키
-																													// 얻어오기
+																												   // 담긴
+																												   // 쿠키
+																												   // 얻어오기
 			HttpServletResponse resp // 새로운 쿠키 만들어서 응답하기
 	) {
 
