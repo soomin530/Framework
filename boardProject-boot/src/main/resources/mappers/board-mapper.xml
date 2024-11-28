@@ -59,6 +59,9 @@
 		ORDER BY BOARD_CODE
 	</select>
 	
+	<!-- ㄴ 자바에서 이용할 법한 이름(카멜케이스)로 별칭 줘야 함
+		 DTO가 없기 때문에!!! -->
+	
 	<!-- 게시글 수 조회 -->
 	<select id="getListCount">
 		SELECT COUNT(*)
