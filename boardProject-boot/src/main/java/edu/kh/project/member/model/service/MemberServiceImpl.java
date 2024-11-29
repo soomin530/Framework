@@ -116,6 +116,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	// 회원 목록 조회
+	@Transactional
 	@Override
 	public List<Member> selectList() {
 		

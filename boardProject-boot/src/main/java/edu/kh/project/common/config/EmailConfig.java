@@ -60,7 +60,7 @@ public class EmailConfig {
 		
 		Properties prop = new Properties();
 		
-		prop.setProperty("mail.transport.protocol", "smtp"); // // 전송 프로토콜을 설정. 여기서는 SMTP를 사용
+		prop.setProperty("mail.transport.protocol", "smtp"); // 전송 프로토콜을 설정. 여기서는 SMTP를 사용
 		prop.setProperty("mail.smtp.auth", "true"); // SMTP 서버 인증을 사용할지 여부를 설정함. 
 													// true로 설정되어 있으므로 인증이 사용됨
 													// SMTP 서버를 사용하여 이메일을 보내려면 보안 상의 이유로 인증이 필요.
