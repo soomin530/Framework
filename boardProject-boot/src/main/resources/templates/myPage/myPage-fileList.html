@@ -47,7 +47,6 @@
 
               <td>
                 <!-- href 경로 : /myPage/file/20240417114905_00001.png -->
-                 <!-- || -> 문자열 이어쓰기 -->
                 <a th:href="|*{filePath}*{fileRename}|"
                   th:download="*{fileOriginalName}"
                   th:text="*{fileOriginalName}" >파일명</a>
@@ -58,8 +57,7 @@
               <td th:text="*{fileUploadDate}">업로드 날짜</td>
 			  
               <td>
-                <img th:src="|*{filePath}*{fileRename}|" alt="이미지" height="100px;"> <!-- 정적 리소스 요청 보내는 것! -->
-                <!-- src = "/myPage/file/20240417114905_00001.png" --> 
+                <img th:src="|*{filePath}*{fileRename}|" alt="이미지" height="100px;">
               </td>
             </tr>
           </tbody>

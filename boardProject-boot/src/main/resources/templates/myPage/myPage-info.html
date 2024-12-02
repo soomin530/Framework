@@ -38,10 +38,8 @@
 
             <input type="text" name="memberNickname" 
               maxlength="10" id="memberNickname"
-              th:value="${session.loginMember.memberNickname}" 
+              th:value="${session.loginMember.memberNickname}"
               >
-             <!-- 기존 닉네임을 저장해둘 hidden 타입 input 태그 -->
-            <input type="hidden" id="currentNickname" th:value="${session.loginMember.memberNickname}">
           </div>
 
 
@@ -94,7 +92,6 @@
   
   
   <!-- 다음 주소 API 추가 -->
-  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   
    <!-- js 추가 -->
   <script src="/js/myPage/myPage.js"></script>

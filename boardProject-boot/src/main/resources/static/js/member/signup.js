@@ -1,32 +1,4 @@
 // 다음 주소 API
-function execDaumPostcode() {
-    new daum.Postcode({
-        oncomplete: function(data) {
-            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-            var addr = ''; // 주소 변수
-
-            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                addr = data.roadAddress;
-            } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                addr = data.jibunAddress;
-            }
-
-            // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            document.getElementById('postcode').value = data.zonecode;
-            document.getElementById("address").value = addr;     
-            // 커서를 상세주소 필드로 이동한다.
-            document.getElementById("detailAddress").focus();
-        }
-    }).open();
-}
-
-// 주소 검색 버튼 클릭 시
-document.querySelector("#searchAddress").addEventListener("click", execDaumPostcode); // 이름 있는 함수 정의 시 그것만 불러서 사용하면 됨
- 
 // ----------------------------------------------
 // **** 회원 가입 유효성 검사 *****
 
@@ -119,34 +91,8 @@ memberEmail.addEventListener("input", e => {
         return;
     }
 
-    // 5) 유효한 이메일 형식인 경우 중복 검사 수행
+    // 5) 유효한 이메일 형식은 경우 중복 검사 수행
     // 비동기(ajax)
-    fetch("/member/checkEmail?memberEmail=" + inputEmail) 
-    .then(resp => resp.text())
-    .then(count => {
-        // count : 1이면 중복, 0이면 중복 아님
-        // == :    값이 같은지 비교   ex) "1" == 1 -> true
-        // === : 타입까지 같은지 비교 ex) "1" === 1 -> false
-        if(count == 1) { // 중복 O
-            emailMessage.innerText = "이미 사용 중인 이메일입니다.";
-            emailMessage.classList.add("error");
-            emailMessage.classList.remove("confirm");
-            checkObj.memberEmail = false; // 중복은 유효하지 않은 상태다..
-            return;
-        }
-
-        // 중복 X 경우
-        emailMessage.innerText = "사용 가능한 이메일입니다.";
-        emailMessage.classList.add("confirm");
-        emailMessage.classList.remove("error");
-        checkObj.memberEmail = true; // 유효한 이메일
-
-    })
-    .catch(error => {
-        // fetch 수행 중 예외 발생 시 처리
-        console.log(error); // 발생한 예외 출력
-
-    });
     
 });
 
@@ -177,19 +123,6 @@ sendAuthKeyBtn.addEventListener("click", () => {
 
     // *************************************
     // 비동기로 서버에서 메일보내기 
-    fetch("/email/signup", {
-        method : "POST",
-        headers : {"Content-Type" : "application/json"},
-        body : memberEmail.value
-    }) 
-    .then(resp => resp.text())
-    .then(result => {
-        if(result == 1) {
-            console.log("인증 번호 발송 성공");
-        } else {
-            console.log("인증 번호 발송 실패!");
-        }
-    })
 
    
 
@@ -271,31 +204,6 @@ checkAuthKeyBtn.addEventListener("click", () => {
     };
 
 	// 인증번호 확인용 비동기 요청 보냄
-    fetch("/email/checkAuthKey", {
-        method : "POST",
-        headers : {"Content-Type" : "application/json"},
-        body : JSON.stringify(obj) // obj JS 객체를 JSON으로 변경
-    }) 
-    .then(resp => resp.text())
-    .then(result => {
-        // 1 or 0
-
-        if(result == 0) { // 인증번호 일치 안 할 때
-            alert("인증번호가 일치하지 않습니다."); 
-            checkObj.authKey = false;
-            return;
-        }
-
-        // 인증번호 일치할 때
-        clearInterval(authTimer); // 타이머 멈춤
-
-        authKeyMessage.innerText = "인증되었습니다.";
-        authKeyMessage.classList.remove("error");
-        authKeyMessage.classList.add("confirm");
-
-        checkObj.authKey = true; // 인증번호 검사 여부 true 변경
-
-    });
   
 });
 
@@ -434,7 +342,7 @@ memberNickname.addEventListener("input", (e) => {
         checkObj.memberNickname = true;
     })
     .catch(err => console.log(err));
-    // inputNickname은 닉네임 입력창에 입력된 닉네임이다
+
 });
 
 // --------------------------------------

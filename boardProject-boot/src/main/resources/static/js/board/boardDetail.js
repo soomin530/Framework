@@ -35,7 +35,7 @@ document.querySelector("#boardLike").addEventListener("click", e => {
     .then(resp => resp.text()) // 반환 결과 text 형태로 변환
     .then(count => {
 
-        if(count == -1) { // 실패했을 경우 -1 리턴했으니까 실패한 경우이다!
+        if(count == -1) {
             console.log("좋아요 처리 실패");
             return;
         }
@@ -45,12 +45,11 @@ document.querySelector("#boardLike").addEventListener("click", e => {
         likeCheck = likeCheck == 0 ? 1 : 0;
         
         // 6. 하트를 채웠다/비웠다 바꾸기
-        e.target.classList.toggle("fa-regular"); // 빈 하트
-        e.target.classList.toggle("fa-solid"); // 채워진 하트
+        e.target.classList.toggle("fa-regular");
+        e.target.classList.toggle("fa-solid");
 
         // 7. 게시글 좋아요 수 수정
         e.target.nextElementSibling.innerText = count;
-		// ㄴ boardLike의 다음 요소인 span에 innerText 넣어주겠다
     })
 
 })
@@ -86,8 +85,6 @@ if(deleteBtn != null){
     }
 
     const url = location.pathname.replace("board","editBoard") + "/delete"; // /editBoard/1/2000/delete
-								// board를 editboard 로 바꾸겠다
-								// /board/1/2000/delete?cp=1
     const queryString = location.search; // ? cp=1
     location.href = url + queryString;
   });
@@ -106,8 +103,6 @@ if(deleteBtn2 != null){
     }
 
     const url = location.pathname.replace("board","editBoard")  + "/delete"; 
-								// board를 editboard 로 바꾸겠다
-
 
     // form태그 생성
     const form = document.createElement("form");

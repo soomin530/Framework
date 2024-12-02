@@ -26,7 +26,6 @@ const selectCommentList = () => {
 
   // [POST, PUT, DELETE]
   // fetch(주소, {method : "", header : {}, body : ""})
-  // 												ㄴ 요청 보내고 싶은 자원
 
   // response.json() 
   // - 응답 받은 JSON 데이터 -> JS 객체로 변환
@@ -163,7 +162,7 @@ const selectCommentList = () => {
 
 
 
-selectCommentList();
+//selectCommentList();
 
 // -----------------------------------------------------------------------
 
@@ -315,7 +314,7 @@ const insertChildComment = (parentCommentNo, btn) => {
     body : JSON.stringify(data) // data 객체를 JSON 문자열로 변환
   })
 
-  .then(response => response.text()) // 0 / 1
+  .then(response => response.text())
   .then(result => {
 
     if(result > 0){

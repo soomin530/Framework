@@ -68,26 +68,26 @@ const createTd = (text) => {
 	return td; // <td>1</td> // <td>user01@kh.or.kr</td> // <td>유저일</td> // <td>N</td>
 }
 
-selectMemberList.addEventListener("click", () => {
+// selectMemberList.addEventListener("click", () => {
 
-  memberList.innerText=""; // innerText를 비워줘야 버튼을 눌렀을 때 값이 계속 추가로 나오지 않음!
+//   memberList.innerText=""; // innerText를 비워줘야 버튼을 눌렀을 때 값이 계속 추가로 나오지 않음!
 
-  fetch("/member/selectList")
-    .then(resp => resp.json()) // 응답 결과를 json으로 파싱(변환)
-    .then(memberselectList => {
+//   fetch("/member/selectList")
+//     .then(resp => resp.json()) // 응답 결과를 json으로 파싱(변환)
+//     .then(memberselectList => {
       
-      for( let member of memberselectList){
+//       for( let member of memberselectList){
 
-        const arr = ['memberNo', 'memberEmail', 'memberNickname', 'memberDelfl']; // 배열 형태로 memberList에 있는 구성들 전달
-        const tr = document.createElement("tr");  // tr 생성
-        for( let i of arr) {
-          tr.append(createTd(member[i]));  // td 요소에 member
-        }
-        memberList.append(tr); //  최종적으로 memberList에 tr에 넣어놓은 값 추가해주기
-      }
+//         const arr = ['memberNo', 'memberEmail', 'memberNickname', 'memberDelfl']; // 배열 형태로 memberList에 있는 구성들 전달
+//         const tr = document.createElement("tr");  // tr 생성
+//         for( let i of arr) {
+//           tr.append(createTd(member[i]));  // td 요소에 member
+//         }
+//         memberList.append(tr); //  최종적으로 memberList에 tr에 넣어놓은 값 추가해주기
+//       }
       
-    })
-});
+//     })
+// });
 
 
 

@@ -72,12 +72,12 @@
 									<!-- 검색 X -->
 									<a th:unless="${param.key}"
 									th:href="@{/board/{boardCode}/{boardNo} (boardCode=${boardCode}, boardNo=*{boardNo}, cp=${pagination.currentPage})}"
-									th:text="*{boardTitle}">게시글 제목</a> 		<!-- 인터셉터에서 가져옴 -->
+									th:text="*{boardTitle}">게시글 제목</a>
 		
 									<!-- 검색 O -->
-									<a th:if="${param.key}" 
+									<a th:if="${param.key}"
 									th:href="@{/board/{boardCode}/{boardNo} (boardCode=${boardCode}, boardNo=*{boardNo}, cp=${pagination.currentPage}, key=${param.key}, query=${param.query})}"
-									th:text="*{boardTitle}">게시글 제목</a> 																		<!-- key : 제목, 글쓴이-->
+									th:text="*{boardTitle}">게시글 제목</a>
 		
 									<th:block th:text="|[*{commentCount}]|">댓글 수</th:block>
 								</td>
@@ -119,21 +119,18 @@
 
 					<!-- 첫 페이지로 이동 -->
 					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=1)}">&lt;&lt;</a></li>
-																					<!-- &lt;&lt; : << -->
 
 					<!-- 이전 목록 마지막 번호로 이동 -->
 					<li><a th:href="@{/board/{boardCode}(boardCode=${boardCode}, cp=*{prevPage})}">&lt;</a></li>
-																								<!-- &lt; : < -->
 
 					<!-- 특정 페이지로 이동 -->
 					
 					<th:block th:each="i : *{#numbers.sequence(startPage, endPage)}">
-						<!-- sequence : 번호 생성기 / startPage 1, endPage 10 들어오면 1 ~ 10 까지의 배열 발생 -->
 						
 						<!-- 현재 보고있는 페이지 -->
 						<li th:if="${i} == *{currentPage}">
 							<a class="current" th:text="${i}">현재페이지</a>
-						</li> <!-- 현재 보고 있는 페이지 숫자에 파란 동그라미 표시! -->
+						</li>
 						
 						<!-- 보고있지 않은 페이지 -->
 						<li th:unless="${i} == *{currentPage}">
@@ -217,7 +214,6 @@
 	
 	<script th:inline="javascript">
 		const boardCode = /*[[${boardCode}]]*/ "게시판 코드 번호";
-		// @PathVariable 을 통해 Controller에서 request scope에 세팅된 boardCode
 	</script>
 	
 	<script src="/js/board/boardList.js"></script>

@@ -8,7 +8,7 @@ const deleteImageList = document.querySelectorAll(".delete-image"); // x버튼 5
 const lastValidFiles = [null, null, null, null, null];
 
 
-/** 미리보기 함수 - 메서드용 주석
+/** 미리보기 함수
  * @param  file : <input type="file"> 에서 선택된 파일
  * @param  order : 이미지 순서
  */
