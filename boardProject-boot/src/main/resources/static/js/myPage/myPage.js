@@ -46,7 +46,7 @@ if(updateInfo != null) {
 
 
         // 주소 유효성 검사
-        // 입력을 안하면 전부 안해야되고
+        // 입력을 안하면 전부 안 해야되고
         // 입력하면 전부 해야된다
 
         const addr0 = memberAddress[0].value.trim().length == 0; // t/f
